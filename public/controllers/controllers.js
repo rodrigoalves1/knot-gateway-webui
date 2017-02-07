@@ -142,6 +142,15 @@ app.controller('DevicesController', function ($rootScope, $scope, $location, App
       });
   };
 
+  $scope.initBcast = function () {
+    AppService.loadBcastDevicesInfo()
+      .then(function onSuccess(result) {
+        $scope.devices = result;
+      }, function onError() {
+        console.log('Error loading devices broadcasting');
+      });
+  };
+
   $scope.add = function () {
     var tmp;
     if ($scope.macAddresses.keys.length === MAX_LENTGH) {
