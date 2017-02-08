@@ -151,18 +151,18 @@ app.controller('DevicesController', function ($rootScope, $scope, $location, App
       });
   };
 
-  $scope.add = function () {
+  $scope.add = function (device) {
     var tmp;
     if ($scope.macAddresses.keys.length === MAX_LENTGH) {
       alert('No space left for new device');
     } else {
       tmp = $scope.macAddresses.keys.find(function (key) {
-        return key.mac === $scope.form.mac;
+        return key.mac === device.mac;
       });
       if (tmp !== undefined) {
         alert('MAC already in use');
       } else {
-        $scope.macAddresses.keys.push({ name: $scope.form.name, mac: $scope.form.mac });
+        $scope.macAddresses.keys.push({ name: device.name, mac: device.mac });
         AppService.saveDevicesInfo($scope.macAddresses)
           .catch(function onError() {
             $scope.macAddresses.keys.pop();
