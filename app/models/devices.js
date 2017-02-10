@@ -23,9 +23,27 @@ var all = function all(done) {
 };
 
 var createOrUpdate = function createOrUpdate(devices, done) {
-  var json = JSON.stringify(devices);
+  devices.key = '';
+  sysbus.invoke({
+    path: '/org/cesar/knot/nrf0',
+    destination: 'org.cesar.knot.nrf',
+    interface: 'org.cesar.knot.nrf0.Adapter',
+    member: 'AddDevice',
+    signature: 'ss',
+    body: [devices.mac, devices.key],
+    type: dbus.messageType.methodCall
+  }, function (err, res) {
+    if (err) {
+      done(err);
+      return;
+    }
 
-  fs.writeFile(DEVICES_FILE, json, 'utf8', done);
+    try {
+      done(null, res);
+    } catch (e) {
+      done(e);
+    }
+  });
 };
 
 var getBroadcastingPeers = function getBroadcastingPeers(done) {
