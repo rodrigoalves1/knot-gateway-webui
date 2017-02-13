@@ -71,8 +71,32 @@ var getBroadcastingPeers = function getBroadcastingPeers(done) {
   });
 };
 
+var remove = function remove(device, done) {
+  sysbus.invoke({
+    path: '/org/cesar/knot/nrf0',
+    destination: 'org.cesar.knot.nrf',
+    interface: 'org.cesar.knot.nrf0.Adapter',
+    member: 'RemoveDevice',
+    signature: 's',
+    body: [device],
+    type: dbus.messageType.methodCall
+  }, function (err, res) {
+    if (err) {
+      done(err);
+      return;
+    }
+
+    try {
+      done(null, res);
+    } catch (e) {
+      done(e);
+    }
+  });
+};
+
 module.exports = {
   all: all,
   createOrUpdate: createOrUpdate,
-  getBroadcastingPeers: getBroadcastingPeers
+  getBroadcastingPeers: getBroadcastingPeers,
+  remove: remove
 };
