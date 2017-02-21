@@ -130,6 +130,7 @@ app.controller('NetworkController', function ($rootScope, $scope, $location, $st
 
 app.controller('DevicesController', function ($rootScope, $scope, $location, AppService) {
   var MAX_LENTGH = 5;
+  var socket = io();
 
   $rootScope.activetab = $location.path();
 
@@ -170,7 +171,6 @@ app.controller('DevicesController', function ($rootScope, $scope, $location, App
     }
   };
 
-
   $scope.remove = function (key) {
     var pos = $scope.macAddresses.keys.lastIndexOf(key);
     var tmp = $scope.macAddresses.keys.splice(pos, 1);
@@ -180,6 +180,17 @@ app.controller('DevicesController', function ($rootScope, $scope, $location, App
         console.log('Could not remove device');
       });
   };
+
+  socket.on('InterfaceAdded', function(msg) {
+    $scope.macAddresses.keys.push({ name: 'device.name', mac: 'device.mac' });
+    $scope.$apply();
+  });
+  socket.on('InterfaceRemoved', function(msg) {
+    //TODO
+  });
+  socket.on('PropertyChanged', function(msg) {
+    //TODO
+  });
 });
 
 app.controller('RebootController', function ($scope, $location, $interval, $state, $window, AppService) {
