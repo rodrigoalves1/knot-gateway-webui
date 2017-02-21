@@ -22,22 +22,33 @@ serverConfig.use('/api', apiRoute.router);
 serverConfig.use('*', handlers.defaultHandler);
 serverConfig.use(handlers.errorHandler);
 
-serverConfig.listen(config.PORT, function () {
+var server = serverConfig.listen(config.PORT, function () {
   console.log('Listening on ' + config.PORT);
 });
 
-if (!sessionBus) {
-  throw new Error('Could not connect to the DBus session bus.');
-}
+var io = require('socket.io').listen(server);
 
-sessionBus.getService(targetServiceName).getInterface(
+io.on('connection', function (socket) {
+  console.log('connection established');
+  if (!sessionBus) {
+    throw new Error('Could not connect to the DBus session bus.');
+  }
+
+  sessionBus.getService(targetServiceName).getInterface(
   targetObjectPath, targetIfaceName, function (err, notifications) {
     if (err || !notifications) {
       console.error('Could not query interface \'' + targetIfaceName + '\', the error was: ' + err ? err : '(no error)');
       process.exit(1);
     }
     console.log('Listening to nrfd signals');
-    notifications.on('VelocityChanged', function () {
-      console.log('VelocityChanged', arguments);
+    notifications.on('InterfaceAdded', function () {
+      socket.broadcast.emit('InterfaceAdded', arguments);
+    });
+    notifications.on('InterfaceRemoved', function () {
+      socket.broadcast.emit('InterfaceRemoved', arguments);
+    });
+    notifications.on('PropertyChanged', function () {
+      socket.broadcast.emit('PropertyChanged', arguments);
     });
   });
+});
