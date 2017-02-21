@@ -320,3 +320,19 @@ input
 {
   height: 35px !important;
 }
+
+.Connected:before {
+    font-family: 'FontAwesome';
+    font-size:1.3em;
+    color:green;
+    content: '\f00c';  /* the ok icon */
+    padding-right: 4px; /* plus 4px spacing */
+}
+
+.NotConnected:before {
+    font-family: 'FontAwesome';
+    font-size:1.3em;
+    color:red;
+    content: '\f00d';  /* the ok icon */
+    padding-right: 4px; /* plus 4px spacing */
+}

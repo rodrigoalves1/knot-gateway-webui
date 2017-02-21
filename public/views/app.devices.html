@@ -4,9 +4,10 @@
     <tr>
       <th>Device Name</th>
       <th>MAC Address</th>
+      <th>Online</th>
     </tr>
     <tr ng-repeat="key in macAddresses.keys">
-      <td>{{ key.name }}</td><td>{{ key.mac }}</td>
+      <td>{{ key.name }}</td><td>{{ key.mac }}</td><td class="{{ key.online }}" align="center"/>
       <td>
         <button class="btn btn-default" ng-click='remove(key)'>
         <span class="glyphicon glyphicon-plus">Remove</span>
@@ -20,7 +21,7 @@
         <br>
         <span ng-show="myForm.newMac.$error.pattern" style="color:red">Invalid MAC</span>
       </td>
-      <td>
+      <td colspan="2">
         <button ng-disabled="myForm.$invalid" class="btn btn-lg btn-primary btn-block" ng-click="add(form)">
         <span class="glyphicon glyphicon-plus">Add</span>
       </button>
