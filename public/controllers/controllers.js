@@ -181,8 +181,9 @@ app.controller('DevicesController', function ($rootScope, $scope, $location, App
       });
   };
 
-  socket.on('InterfaceAdded', function(msg) {
-    $scope.macAddresses.keys.push({ name: 'device.name', mac: 'device.mac' });
+  socket.on('VelocityChanged', function(msg) {
+    $scope.macAddresses.keys.push({ name: 'device.name', mac: '00:00:00:00:01:02:03:04', online: 'Connected' });
+    $scope.macAddresses.keys.push({ name: 'device.name', mac: '00:00:00:00:01:02:03:05', online: 'NotConnected' });
     $scope.$apply();
   });
   socket.on('InterfaceRemoved', function(msg) {

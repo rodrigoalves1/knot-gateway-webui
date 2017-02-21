@@ -50,5 +50,8 @@ io.on('connection', function (socket) {
     notifications.on('PropertyChanged', function () {
       socket.broadcast.emit('PropertyChanged', arguments);
     });
+    notifications.on('VelocityChanged', function () {
+      socket.broadcast.emit('VelocityChanged', arguments);
+    });
   });
 });
